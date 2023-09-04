@@ -9,6 +9,8 @@ def line_between(p1, p2):
 
     if y1 == y2:
         y2 += 0.001
+
+        
     if x1 == x2:
         a2 = 0
     else:
