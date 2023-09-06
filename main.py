@@ -9,7 +9,7 @@ from button_module import Button
 pygame.init()
 
 # Constants for the screen dimensions
-SCREEN_WIDTH = 800
+SCREEN_WIDTH = 830
 SCREEN_HEIGHT = 600
 
 # Colors

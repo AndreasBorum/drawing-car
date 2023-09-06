@@ -3,39 +3,35 @@ import sympy as sp
 
 
 def find_intersect(start_, end_, l_wheel_, r_wheel_):
-    start = np.array(start_)
-    end = np.array(end_)
-    r_wheel = np.array(r_wheel_)
-    l_wheel = np.array(l_wheel_)
-    print(start,end,r_wheel,l_wheel)
+    A = np.array(start_)
+    B = np.array(end_)
+    R = np.array(r_wheel_)
+    L = np.array(l_wheel_)
+    #print(A,B,R,L)
 
-    start_end_v = end-start
-    between = (start_end_v)/2+start
-    between_v = np.array((-start_end_v[1], start_end_v[0]))
-    between_wheels_v = r_wheel-l_wheel
+    AB = B-A
+    M = (AB)/2+A
+    v = np.array((-AB[1], AB[0]))
+    LR= R-L
 
-    wheel_v = r_wheel-l_wheel
-    print('Between vector: ',start_end_v)
-    print('Between point: ',between)
-    print('Between 90 vector: ',between_v)
-    print('Between wheels: ',between_wheels_v)
 
     # checks if the lines af parallel 
-    if np.linalg.det([wheel_v, between_v]) == 0:
+    if np.linalg.det([LR, v]) == 0:
         return None
     
 
     # finder skæringspunktet
     s, t = sp.symbols('s t')
-    equation1 = sp.Eq(between_wheels_v[0]*t+l_wheel[0], between_v[0]*s+between[0])
-    equation2 = sp.Eq(between_wheels_v[1]*t+l_wheel[1], between_v[1]*s+between[1])
+    equation1 = sp.Eq(LR[0]*t+L[0], v[0]*s+M[0])
+    equation2 = sp.Eq(LR[1]*t+L[1], v[1]*s+M[1])
     solution = sp.solve((equation1, equation2), (s, t))
-    print(solution)
-    new_between_v = np.array([between_v[0]*solution[s], between_v[1]*solution[s]], dtype=float)
-    new_between_wheels_v = np.array([between_wheels_v[0]*solution[t], between_wheels_v[1]*solution[t]], dtype=float)
-    intersect=new_between_v+between
-    print('new between, wheels', new_between_v, new_between_wheels_v)
+    #print(solution)
+    
+    new_v = np.array([v[0]*solution[s], v[1]*solution[s]], dtype=float)
+    new_LR = np.array([LR[0]*solution[t], LR[1]*solution[t]], dtype=float)
+    intersect=new_v+M
+    #print('new between, wheels', new_v, new_LR)
 
-    lenght= np.linalg.norm(intersect-l_wheel)
-    print('inter, len: ',intersect, lenght)
-    return tuple(intersect), lenght
+    lenghts= [np.linalg.norm(intersect-point) for point in (A,L,R)]
+    #print('inter, len: ',intersect, lenghts)
+    return tuple(intersect), lenghts

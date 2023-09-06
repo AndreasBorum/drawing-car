@@ -1,6 +1,6 @@
 import pygame
 
-SURFACE_SIZE = (200,200)
+SURFACE_SIZE = (400,400)
 SURFACE_POS = (10,10)
 
 class Drawing_surface():

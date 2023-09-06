@@ -3,7 +3,7 @@ import pygame
 import math_module
 
 SURFACE_SIZE = (400,400)
-SURFACE_POS = (300,10)
+SURFACE_POS = (420,10)
 
 car_structur_dict = {
     'A': (0, 0),
@@ -48,11 +48,13 @@ class Car_surface():
         parrent_surface.blit(self.surface,SURFACE_POS)
 
     def start_car(self, points):
+        self.surface.fill('blue')
         self.points=points
 
         self.move_car(points[0], True)
-        center,lenght=math_module.find_intersect(points[0],points[1], self.car_vectors[10], self.car_vectors[0])
-        pygame.draw.circle(self.surface,(255,0,0,0),center,lenght,1)
+        center,lenghts=math_module.find_intersect(points[0],points[1], *self.car_wheels())
+        for lenght in lenghts:
+            pygame.draw.circle(self.surface,(255,0,0,0),center,lenght,1)
         pygame.draw.circle(self.surface,'red',center,2)
 
     def move_car(self,pos, front=False):
@@ -65,4 +67,8 @@ class Car_surface():
     def turn_car(self, angle):
         self.car_vectors = [vector.rotate(angle) for vector in self.car_vectors]
 
+    def car_wheels(self):
+        R= tuple(map(lambda x, y: (x + y)/2, self.car_vectors[8], self.car_vectors[10]))
+        L= tuple(map(lambda x, y: (x + y)/2, self.car_vectors[0], self.car_vectors[2]))
+        return R, L
 
