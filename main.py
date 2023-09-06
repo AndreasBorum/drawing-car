@@ -23,12 +23,12 @@ RED = (255, 0, 0)
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Mouse Coordinates Relative to Rectangle")
 
-start_drawing_btn = Button((80,40),(20,20))
+start_drawing_btn = Button((80,40),(20,400))
 drawing_surface = Drawing_surface()
 car_surface = Car_surface()
 
 def start_drawing():
-    print(drawing_surface.dots)
+    car_surface.start_car(drawing_surface.dots)
 
 # Main game loop
 running = True

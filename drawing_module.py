@@ -1,7 +1,7 @@
 import pygame
 
 SURFACE_SIZE = (200,200)
-SURFACE_POS = (100,300)
+SURFACE_POS = (10,10)
 
 class Drawing_surface():
     def __init__(self) -> None:
@@ -29,12 +29,10 @@ class Drawing_surface():
         parrent_surface.blit(self.surface,SURFACE_POS)
 
     def surface_clicked(self):
-        print('clicked')
         if not self.is_drawing:
             self.dots.clear()
         self.is_drawing = True
     
     def surface_unclicked(self):
-        print('unclicked')
         if self.is_drawing:
             self.is_drawing = False
