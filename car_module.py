@@ -40,9 +40,9 @@ class Car_surface():
 
     def move_car(self, pos, front=False):
         if front:
-            self.car_vectors = {key: (coords+pos)-CAR_STRUCTUR_DICT['F'] for key, coords in CAR_STRUCTUR_DICT.items()}
+            self.car_vectors = {key: (coords+pos)-CAR_STRUCTUR_DICT['F'] for key, coords in CAR_STRUCTUR_VECTORS_DICT.items()}
         else:
-            self.car_vectors = {key: coords+pos for key, coords in CAR_STRUCTUR_DICT.items()}
+            self.car_vectors = {key: coords+pos for key, coords in CAR_STRUCTUR_VECTORS_DICT.items()}
 
     def turn_car(self, angle):
         self.car_vectors = {key: vector.rotate(angle) for key, vector in self.car_vectors.items()}
