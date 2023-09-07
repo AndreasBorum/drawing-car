@@ -34,4 +34,6 @@ def find_intersect(start_, end_, l_wheel_, r_wheel_):
 
     lenghts= [np.linalg.norm(intersect-point) for point in (A,L,R)]
     #print('inter, len: ',intersect, lenghts)
-    return tuple(intersect), lenghts
+    angle = np.arccos(new_v.dot(new_LR)/(np.linalg.norm(new_v)*np.linalg.norm(new_LR)))
+    print('Angle: ', angle)
+    return tuple(intersect), lenghts, angle
