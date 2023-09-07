@@ -1,5 +1,6 @@
 import numpy as np
 import sympy as sp
+from pygame import Vector2
 
 
 def find_intersect(start_, end_, l_wheel_, r_wheel_):
@@ -32,8 +33,28 @@ def find_intersect(start_, end_, l_wheel_, r_wheel_):
     intersect=new_v+M
     #print('new between, wheels', new_v, new_LR)
 
+
+
     lenghts= [np.linalg.norm(intersect-point) for point in (A,L,R)]
     #print('inter, len: ',intersect, lenghts)
+
     angle = np.arccos(new_v.dot(new_LR)/(np.linalg.norm(new_v)*np.linalg.norm(new_LR)))
     print('Angle: ', angle)
-    return tuple(intersect), lenghts, angle
+
+    lenght_to_next = angle*lenghts[0]
+    
+    print('lenght to next point', lenght_to_next)
+    return tuple(intersect), lenghts, angle, lenght_to_next, Vector2(tuple(-new_LR))
+
+def car_step(angle,lenght,angle_to_next,speed):
+
+
+    if speed>angle_to_next:
+        speed=angle_to_next
+        new_angle_to_next = 0
+    else:
+        new_angle_to_next = angle_to_next-speed
+    
+    v =Vector2(lenght,0).rotate_rad(speed)-Vector2(lenght,0)
+    print(f'car step func-  full angle:{round(angle, 6)}  angle to next:{round(angle_to_next,6)}  speed:{round(speed,6)}  new angle to:{round(new_angle_to_next,6)}  vector:{v}')
+    return v, speed, new_angle_to_next

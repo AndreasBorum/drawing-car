@@ -15,81 +15,101 @@ class Car_surface():
 
         self.points = []
         self.at_point = 0
+        self.angle_between = 0
+        self.angle_to_next = 0
+        self.CL = None
+        self.path_lines = []
 
-        self.car_vectors = CAR_STRUCTUR_VECTORS_DICT
-        self.car_pos = (0,0)
+        self.is_running = False
+        self.car = Car()
 
+        self.count = 0
 
-    def draw(self, parrent_surface):
+    def draw(self, parrent_surface, speed):
         self.surface.fill('blue')
 
-        for point in self.points:
-            pygame.draw.circle(self.surface, 'white', point, 2)
-        pygame.draw.polygon(self.surface, (0, 0, 0, 0), [value for value in self.car_vectors.values()], 3)
+        for circle in self.path_lines:
+            pygame.draw.circle(self.surface, (255, 0, 0, 0),
+                               circle[0], circle[1], 1)
+
+        if self.is_running:
+            self.count += 1
+            for point in self.points:
+                pygame.draw.circle(self.surface, 'white', point, 2)
+            if self.count < 20:
+                self.take_step(speed)
+            self.car.draw(self.surface)
 
         parrent_surface.blit(self.surface, SURFACE_POS)
 
+    def take_step(self, speed):
+        v, turn_angle, a = math_module.car_step(
+            self.angle_between, self.path_lines[-1][1], self.angle_to_next, speed)
+        if a == 0:
+            print('at new point')
+            self.at_point += 1
+            self.path_to_next_point()
+        else:
+            self.angle_to_next = a
+        self.car.move_car(self.CL.rotate_rad(self.angle_between-self.angle_to_next))
+        #self.car.turn_car(turn_angle)
+
     def start_car(self, points):
-        self.surface.fill('blue')
         self.points = points
 
-        self.move_car(points[0], True)
-        center, lenghts, _ = math_module.find_intersect(
-            points[0], points[1], *self.car_wheels())
-        for lenght in lenghts:
-            pygame.draw.circle(self.surface, (255, 0, 0, 0), center, lenght, 1)
-        pygame.draw.circle(self.surface, 'red', center, 2)
+        self.car.move_car(points[0], True)
+        self.path_to_next_point()
+
+        self.is_running = True
 
     def path_to_next_point(self):
-        center, lenghts, angle = math_module.find_intersect(self.points[self.at_point], self.points[self.at_point+1], *self.car_wheels())
-
-    def move_car(self, pos, front=False):
-        self.car_pos = pos
-        if front:
-            self.car_vectors = {key: (coords+pos)-CAR_STRUCTUR_DICT['F'] for key, coords in CAR_STRUCTUR_VECTORS_DICT.items()}
+        if self.at_point == len(self.points):
+            return
         else:
-            self.car_vectors = {key: coords+pos for key, coords in CAR_STRUCTUR_VECTORS_DICT.items()}
-        self.turn_car(1)
+            center, lenghts, angle, _, self.CL  = math_module.find_intersect(
+                self.points[self.at_point], self.points[self.at_point+1], *self.car.get_car_wheels())
+            self.angle_between = angle
+            self.angle_to_next = angle
+            self.path_lines.append((center, lenghts[0], 0))
 
 
-    def turn_car(self, angle):
-        print('berfore turn: ', self.car_vectors)
-        self.car_vectors = {key: vector.rotate_rad(angle)+self.car_pos for key, vector in CAR_STRUCTUR_VECTORS_DICT.items()}
-        print('After turn: ', self.car_vectors)
-
-
-    def car_wheels(self):
-        R = tuple(map(lambda x, y: (x + y)/2,
-                  self.car_vectors['I'], self.car_vectors['K']))
-        L = tuple(map(lambda x, y: (x + y)/2,
-                  self.car_vectors['A'], self.car_vectors['C']))
-        return R, L
-
-
-
-class car():
+class Car():
     def __init__(self):
-        self.pos=(0,0)
-        self.angle=0
+        self.pos = (0, 0)
+        self.angle = 0
         self.car_points_v = CAR_STRUCTUR_VECTORS_DICT
 
-
     def draw(self, surface):
-        pygame.draw.polygon(surface, (0, 0, 0, 0), [value for value in self.car_points_v.values()], 2)
+        pygame.draw.polygon(surface, (0, 0, 0, 0), [
+                            value for value in self.car_points_v.values()], 2)
 
     def turn_car(self, turn_angle):
-        self.car_points_v = {key: vector.rotate_rad(self.angle+turn_angle)+self.pos for key, vector in CAR_STRUCTUR_VECTORS_DICT.items()}
+        self.angle += turn_angle
+        print('car angle: ', self.angle)
+        self.car_points_v = {key: vector.rotate_rad(
+            -self.angle)+self.pos for key, vector in CAR_STRUCTUR_VECTORS_DICT.items()}
 
     def move_car(self, new_pos, front=False):
         self.pos = new_pos
         if front:
-            self.car_points_v = {key: (coords+new_pos)-CAR_STRUCTUR_DICT['F'] for key, coords in CAR_STRUCTUR_VECTORS_DICT.items()}
+            self.car_points_v = {key: (
+                coords+new_pos)-CAR_STRUCTUR_DICT['F'] for key, coords in CAR_STRUCTUR_VECTORS_DICT.items()}
         else:
-            self.car_points_v = {key: coords+new_pos for key, coords in CAR_STRUCTUR_VECTORS_DICT.items()}
-    
+            self.car_points_v = {key: coords+new_pos for key,
+                                 coords in CAR_STRUCTUR_VECTORS_DICT.items()}
+
     def move_car_rel(self, pos_v, front=False):
         self.pos += pos_v
         if front:
-            self.car_points_v = {key: (coords+pos_v)-CAR_STRUCTUR_DICT['F'] for key, coords in self.car_points_v.items()}
+            self.car_points_v = {key: (
+                coords+pos_v)-CAR_STRUCTUR_DICT['F'] for key, coords in self.car_points_v.items()}
         else:
-            self.car_points_v = {key: coords+pos_v for key, coords in self.car_points_v.items()}
+            self.car_points_v = {key: coords+pos_v for key,
+                                 coords in self.car_points_v.items()}
+
+    def get_car_wheels(self):
+        R = tuple(map(lambda x, y: (x + y)/2,
+                  self.car_points_v['I'], self.car_points_v['K']))
+        L = tuple(map(lambda x, y: (x + y)/2,
+                  self.car_points_v['A'], self.car_points_v['C']))
+        return R, L

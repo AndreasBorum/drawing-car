@@ -23,12 +23,14 @@ RED = (255, 0, 0)
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Mouse Coordinates Relative to Rectangle")
 
-start_drawing_btn = Button((80,40),(20,400))
+start_drawing_btn = Button((80,40),(20,450))
 drawing_surface = Drawing_surface()
 car_surface = Car_surface()
 
 def start_drawing():
     car_surface.start_car(drawing_surface.dots)
+
+clock = pygame.time.Clock()
 
 # Main game loop
 running = True
@@ -52,10 +54,10 @@ while running:
 
 
     drawing_surface.draw(screen)
-    car_surface.draw(screen)
+    car_surface.draw(screen, 0.1)
     start_drawing_btn.draw(screen)
 
-
+    clock.tick(10)
     # Update the display
     pygame.display.flip()
 
