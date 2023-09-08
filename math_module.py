@@ -43,18 +43,22 @@ def find_intersect(start_, end_, l_wheel_, r_wheel_):
 
     lenght_to_next = angle*lenghts[0]
     
-    print('lenght to next point', lenght_to_next)
-    return tuple(intersect), lenghts, angle, lenght_to_next, Vector2(tuple(-new_LR))
+    #print('lenght to next point', lenght_to_next)
+    #print('CL:', -new_LR)
+    return tuple(intersect), angle
 
-def car_step(angle,lenght,angle_to_next,speed):
+def car_step(C, R,L, angle,current_angle,speed):
 
-
+    angle_to_next= angle-current_angle
     if speed>angle_to_next:
         speed=angle_to_next
-        new_angle_to_next = 0
+        new_current_angle = 0
     else:
-        new_angle_to_next = angle_to_next-speed
+        new_current_angle = current_angle+speed
     
-    v =Vector2(lenght,0).rotate_rad(speed)-Vector2(lenght,0)
-    print(f'car step func-  full angle:{round(angle, 6)}  angle to next:{round(angle_to_next,6)}  speed:{round(speed,6)}  new angle to:{round(new_angle_to_next,6)}  vector:{v}')
-    return v, speed, new_angle_to_next
+    new_L = (Vector2(L)-Vector2(C)).rotate_rad(-speed)-(Vector2(L)-Vector2(C))+L
+    new_R = (Vector2(R)-Vector2(C)).rotate_rad(-speed)-(Vector2(R)-Vector2(C))+R
+
+    print(f'car step func-  full angle:{round(angle, 6)}  speed:{round(speed,6)}  new_current_angle:{round(new_current_angle,6)} ')
+    print(f"   Centrum:{C}   before- R:{R}  L:{L}      after- R:{new_R}  L:{new_L}")
+    return new_R, new_L, new_current_angle

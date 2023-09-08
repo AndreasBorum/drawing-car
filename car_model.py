@@ -5,7 +5,7 @@ CAR_STRUCTUR_DICT = {
     'B': (0, 3),
     'C': (1, 3),
     'D': (1, 2),
-    'E': (2, 3),
+    'E': (3, 3),
     'F': (3, 6),
     'G': (4, 3),
     'H': (5, 2),
@@ -22,4 +22,7 @@ CAR_STRUCTUR_DICT = {key: tuple(10 * value for value in coords)
 
 CAR_STRUCTUR_VECTORS_DICT = {key: pygame.math.Vector2(coords)
                      for key, coords in CAR_STRUCTUR_DICT.items()}
+
+R_V = pygame.math.Vector2(tuple(map(lambda x, y: (x - y)/2, CAR_STRUCTUR_VECTORS_DICT['I'], CAR_STRUCTUR_VECTORS_DICT['K'])))
+L_V = pygame.math.Vector2(tuple(map(lambda x, y: (x - y)/2, CAR_STRUCTUR_VECTORS_DICT['C'], CAR_STRUCTUR_VECTORS_DICT['A'])))
 

@@ -24,6 +24,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Mouse Coordinates Relative to Rectangle")
 
 start_drawing_btn = Button((80,40),(20,450))
+next_point_btn = Button((80,40),(200,450))
 drawing_surface = Drawing_surface()
 car_surface = Car_surface()
 
@@ -43,6 +44,8 @@ while running:
                 drawing_surface.surface_clicked()
             elif start_drawing_btn.collide_rect.collidepoint(event.pos):
                 start_drawing_btn.on_press(start_drawing)
+            elif next_point_btn.collide_rect.collidepoint(event.pos):
+                next_point_btn.on_press(car_surface.take_step)
 
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             if drawing_surface.is_drawing:
@@ -56,8 +59,9 @@ while running:
     drawing_surface.draw(screen)
     car_surface.draw(screen, 0.1)
     start_drawing_btn.draw(screen)
+    next_point_btn.draw(screen)
 
-    clock.tick(10)
+    clock.tick(60)
     # Update the display
     pygame.display.flip()
 
