@@ -1,5 +1,6 @@
 import numpy as np
 import sympy as sp
+import math
 from pygame import Vector2
 
 
@@ -13,7 +14,7 @@ def find_intersect(start_, end_, l_wheel_, r_wheel_):
     AB = B-A
     M = (AB)/2+A
     v = np.array((-AB[1], AB[0]))
-    LR= R-L
+    LR= ((R-L)/2)*1.5
 
 
     # checks if the lines af parallel 
@@ -40,17 +41,19 @@ def find_intersect(start_, end_, l_wheel_, r_wheel_):
 
     angle = np.arccos(new_v.dot(new_LR)/(np.linalg.norm(new_v)*np.linalg.norm(new_LR)))
     print('Angle: ', angle)
+    angle *= math.copysign(1,solution[t])*-1
 
     lenght_to_next = angle*lenghts[0]
     
     #print('lenght to next point', lenght_to_next)
     #print('CL:', -new_LR)
-    return tuple(intersect), angle
+    return tuple(intersect), angle, lenghts[0]
 
 def car_step(C, R,L, angle,current_angle,speed):
+    speed *= math.copysign(1,angle)
 
     angle_to_next= angle-current_angle
-    if speed>angle_to_next:
+    if abs(speed)>abs(angle_to_next):
         speed=angle_to_next
         new_current_angle = 0
     else:
