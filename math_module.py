@@ -19,7 +19,7 @@ def find_intersect(start_, end_, l_wheel_, r_wheel_):
 
     # checks if the lines af parallel 
     if np.linalg.det([LR, v]) == 0:
-        return None
+        return (0,0),0,0
     
 
     # finder skæringspunktet
@@ -40,7 +40,7 @@ def find_intersect(start_, end_, l_wheel_, r_wheel_):
     #print('inter, len: ',intersect, lenghts)
 
     angle = np.arccos(new_v.dot(new_LR)/(np.linalg.norm(new_v)*np.linalg.norm(new_LR)))
-    print('Angle: ', angle)
+    #print('Angle: ', angle)
     angle *= math.copysign(1,solution[t])*-1
 
     lenght_to_next = angle*lenghts[0]

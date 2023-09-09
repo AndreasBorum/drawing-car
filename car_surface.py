@@ -28,12 +28,12 @@ class Car_surface():
         
         if self.is_drawing:
             #self.take_step(speed)
-            pygame.draw.polygon(self.surface, (0, 0, 0, 0), [value for value in self.car.car_points_v.values()], 3)
             self.car.draw(self.surface)
 
-        for point, radius in self.center_points:
+        for point, legnths in self.center_points:
             pygame.draw.circle(self.surface, 'red', point, 2)
-            #pygame.draw.circle(self.surface, (0,0,0,0), point, radius, 1)
+            for radius in legnths:
+                pygame.draw.circle(self.surface, (0,0,0,0), point, radius, 1)
 
 
         parrent_surface.blit(self.surface, SURFACE_POS)
@@ -42,7 +42,6 @@ class Car_surface():
         speed=0.1
 
         old_L, old_R=self.car.get_car_wheels()
-
         R,L,self.current_angle= math_module.car_step(self.center_points[-1][0],old_R, old_L, self.angle_between_points,self.current_angle, speed)
         self.car.set_car_wheels(R,L)
         if self.current_angle==0:
@@ -64,5 +63,8 @@ class Car_surface():
 
     def path_to_next_point(self):
         self.at_point+=1
-        center, self.angle_between_points, radius= math_module.find_intersect(self.points[self.at_point], self.points[self.at_point+1], *self.car.get_car_wheels())
-        self.center_points.append((center,radius ))
+        if self.at_point < len(self.points)-1:
+            center, self.angle_between_points, radius= math_module.find_intersect(self.points[self.at_point], self.points[self.at_point+1], *self.car.get_car_wheels())
+            self.center_points = [(center,radius )]
+        else:
+            self.is_drawing = False

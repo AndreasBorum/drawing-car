@@ -17,7 +17,7 @@ class Drawing_surface():
         pos = tuple(map(lambda i, j: i - j, pygame.mouse.get_pos(), SURFACE_POS))
         if len(self.dots)==0:
             self.dots.append(pos)
-        elif self.rect.collidepoint(pos) and pygame.math.Vector2.distance_to(pygame.Vector2(self.dots[-1]), pygame.Vector2(pos)) > 40:
+        elif self.rect.collidepoint(pos) and pygame.math.Vector2.distance_to(pygame.Vector2(self.dots[-1]), pygame.Vector2(pos)) > 100:
             self.dots.append(pos)
 
     def draw(self, parrent_surface):
