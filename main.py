@@ -47,7 +47,7 @@ while running:
             # elif start_drawing_btn.collide_rect.collidepoint(event.pos):
                 # start_drawing_btn.on_press(start_drawing)
             elif next_point_btn.collide_rect.collidepoint(event.pos):
-                explain_surface.print_angle()
+                explain_surface.car.turn_car_outside_point(90,(200,200),True)
                 # next_point_btn.on_press(car_surface.take_step)
             if explain_surface.collide_rect.collidepoint(event.pos):
                 explain_surface.surface_clicked(event.pos)

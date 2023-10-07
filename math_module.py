@@ -22,7 +22,7 @@ def find_intersect(car_vectors, target):
 
     # finder skæringspunktet
     s = np.cross(LR,(R-M))/np.cross(LR,v)
-    t = np.cross(v,(M-R))/np.cross(v,LR)
+    t = np.cross(v,(M-np.array(car_vectors['centerW'])))/np.cross(v,LR)
 
     new_v = v*s
     C=new_v+M
@@ -35,21 +35,3 @@ def find_intersect(car_vectors, target):
     visuals ={'M':tuple(M), 'radius':np.linalg.norm(C-A)}
 
     return tuple(C), angle, visuals, direction
-
-
-def car_step(C, R,L, angle,current_angle,speed):
-    speed *= math.copysign(1,angle)
-
-    angle_to_next= angle-current_angle
-    if abs(speed)>abs(angle_to_next):
-        speed=angle_to_next
-        new_current_angle = 0
-    else:
-        new_current_angle = current_angle+speed
-    
-    new_L = (Vector2(L)-Vector2(C)).rotate_rad(-speed)-(Vector2(L)-Vector2(C))+L
-    new_R = (Vector2(R)-Vector2(C)).rotate_rad(-speed)-(Vector2(R)-Vector2(C))+R
-
-    print(f'car step func-  full angle:{round(angle, 6)}  speed:{round(speed,6)}  new_current_angle:{round(new_current_angle,6)} ')
-    print(f"   Centrum:{C}   before- R:{R}  L:{L}      after- R:{new_R}  L:{new_L}")
-    return new_R, new_L, new_current_angle
