@@ -1,5 +1,4 @@
 import numpy as np
-import sympy as sp
 import math
 from pygame import Vector2
 
@@ -18,10 +17,12 @@ def find_intersect(car_vectors, target):
 
     # checks if the lines af parallel 
     if np.linalg.det([LR, v]) == 0:
-        return (0,0)
+        visuals ={'M':tuple(M), 'radius':0}
+        return M, 0, visuals, 0
 
     # finder skæringspunktet
     s = np.cross(LR,(R-M))/np.cross(LR,v)
+    t = np.cross(v,(M-R))/np.cross(v,LR)
 
     new_v = v*s
     C=new_v+M
@@ -29,10 +30,11 @@ def find_intersect(car_vectors, target):
     CA = A-C
     CB = B-C
     angle = np.arccos(CA.dot(CB)/(np.linalg.norm(CA)*np.linalg.norm(CB)))
+    direction = 1 if np.sign(s)!=np.sign(t) else -1
 
     visuals ={'M':tuple(M), 'radius':np.linalg.norm(C-A)}
 
-    return tuple(C), angle, visuals
+    return tuple(C), angle, visuals, direction
 
 
 def car_step(C, R,L, angle,current_angle,speed):

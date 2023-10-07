@@ -60,10 +60,14 @@ class Explain_surface():
         self.car.draw(self.surface)
 
         # writes the angle as text on surface
-        text = f"Angle: {math.degrees(round(self.angle,3))}"
+        text1 = f"Angle: {math.degrees(round(self.angle,3))}"
         font = pygame.font.Font(None, 20)
-        text_surface = font.render(text, True, 'WHITE')
-        self.surface.blit(text_surface, (10, 10))
+        text_surface1 = font.render(text1, True, 'WHITE')
+        self.surface.blit(text_surface1, (10, 10))
+
+        text2 = f"Direction: {self.direction}"
+        text_surface2 = font.render(text2, True, 'WHITE')
+        self.surface.blit(text_surface2, (10, 30))
 
         #draw to screen
         parrent_surface.blit(self.surface, SURFACE_POS)
@@ -83,7 +87,7 @@ class Explain_surface():
     def update_path(self):
         """calculats the path"""
         car_vectors = self.car.get_pos_vectors()
-        self.center , self.angle, self.visuals= math_module.find_intersect(car_vectors,self.target_pos)
+        self.center , self.angle, self.visuals, self.direction = math_module.find_intersect(car_vectors,self.target_pos)
         
         #print(self.center,M)
         self.wheel_line = self.make_line(car_vectors['LW'], car_vectors['RW'])
