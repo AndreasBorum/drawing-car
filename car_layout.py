@@ -19,8 +19,9 @@ CAR_STRUCTURE_DICT = {
     'center': (3, 2),
     'RW': (5.5, 1.5),
     'LW': (0.5, 1.5),
+    'centerW':(3, 1.5),
 }
-SPECIAL_POINTS = ['center','RW','LW' ]
+SPECIAL_POINTS = ['center','RW','LW' ,'centerW']
 CAR_STRUCTURE_DICT = {key: tuple(10 * value for value in coords)
                      for key, coords in CAR_STRUCTURE_DICT.items()}
 

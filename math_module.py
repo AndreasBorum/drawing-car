@@ -4,50 +4,36 @@ import math
 from pygame import Vector2
 
 
-def find_intersect(start_, end_, l_wheel_, r_wheel_):
-    A = np.array(start_)
-    B = np.array(end_)
-    R = np.array(r_wheel_)
-    L = np.array(l_wheel_)
-    #print(A,B,R,L)
+def find_intersect(car_vectors, target):
+    A = np.array(car_vectors['F'])
+    B = np.array(target)
+    R = np.array(car_vectors['RW'])
+    L = np.array(car_vectors['LW'])
 
     AB = B-A
     M = (AB)/2+A
     v = np.array((-AB[1], AB[0]))
-    LR= ((R-L)/2)*1.5
+    LR= R-L
 
 
     # checks if the lines af parallel 
     if np.linalg.det([LR, v]) == 0:
-        return (0,0),0,0
-    
+        return (0,0)
 
     # finder skæringspunktet
-    s, t = sp.symbols('s t')
-    equation1 = sp.Eq(LR[0]*t+L[0], v[0]*s+M[0])
-    equation2 = sp.Eq(LR[1]*t+L[1], v[1]*s+M[1])
-    solution = sp.solve((equation1, equation2), (s, t))
-    #print(solution)
-    
-    new_v = np.array([v[0]*solution[s], v[1]*solution[s]], dtype=float)
-    new_LR = np.array([LR[0]*solution[t], LR[1]*solution[t]], dtype=float)
-    intersect=new_v+M
-    #print('new between, wheels', new_v, new_LR)
+    s = np.cross(LR,(R-M))/np.cross(LR,v)
 
+    new_v = v*s
+    C=new_v+M
 
+    CA = A-C
+    CB = B-C
+    angle = np.arccos(CA.dot(CB)/(np.linalg.norm(CA)*np.linalg.norm(CB)))
 
-    lenghts= [np.linalg.norm(intersect-point) for point in (A,L,R)]
-    #print('inter, len: ',intersect, lenghts)
+    visuals ={'M':tuple(M), 'radius':np.linalg.norm(C-A)}
 
-    angle = np.arccos(new_v.dot(new_LR)/(np.linalg.norm(new_v)*np.linalg.norm(new_LR)))
-    #print('Angle: ', angle)
-    angle *= math.copysign(1,solution[t])*-1
+    return tuple(C), angle, visuals
 
-    lenght_to_next = angle*lenghts[0]
-    
-    #print('lenght to next point', lenght_to_next)
-    #print('CL:', -new_LR)
-    return tuple(intersect), angle, lenghts[0]
 
 def car_step(C, R,L, angle,current_angle,speed):
     speed *= math.copysign(1,angle)
