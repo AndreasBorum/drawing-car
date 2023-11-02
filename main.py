@@ -10,7 +10,7 @@ from button_module import Button
 pygame.init()
 
 # Constants for the screen dimensions
-SCREEN_WIDTH = 830
+SCREEN_WIDTH = 1100
 SCREEN_HEIGHT = 600
 
 # Colors
@@ -24,31 +24,31 @@ RED = (255, 0, 0)
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Mouse Coordinates Relative to Rectangle")
 
+# Create elements
 start_drawing_btn = Button((80,40),(20,450))
 next_point_btn = Button((80,40),(200,450))
 drawing_surface = Drawing_surface()
-# car_surface = Car_surface()
+car_surface = Car_surface()
 explain_surface=Explain_surface()
 
-# def start_drawing():
-    # car_surface.start_car(drawing_surface.dots)
-
+# Create clock
 clock = pygame.time.Clock()
 
-# Main game loop
+# ---- Main game loop -----
 running = True
 while running:
+
+    # - Evet loop -
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             if drawing_surface.collide_rect.collidepoint(event.pos):
                 drawing_surface.surface_clicked()
-            # elif start_drawing_btn.collide_rect.collidepoint(event.pos):
-                # start_drawing_btn.on_press(start_drawing)
+            elif start_drawing_btn.collide_rect.collidepoint(event.pos):
+                start_drawing_btn.on_press(lambda: car_surface.import_path_points(drawing_surface.get_points()))
             elif next_point_btn.collide_rect.collidepoint(event.pos):
-                explain_surface.car.turn_car_outside_point(90,(200,200),True)
-                # next_point_btn.on_press(car_surface.take_step)
+                pass #next_point_btn.on_press( )
             if explain_surface.collide_rect.collidepoint(event.pos):
                 explain_surface.surface_clicked(event.pos)
 
@@ -60,19 +60,22 @@ while running:
         if event.type == pygame.MOUSEWHEEL:
             if explain_surface.collide_rect.collidepoint(pygame.mouse.get_pos()):
                 explain_surface.turn_car(event.y)
-        
+    # -   -    -    -   -
 
     # Clear the screen
     screen.fill(BLACK)
 
 
     drawing_surface.draw(screen)
-    # car_surface.draw(screen, 0.1)
+    car_surface.draw(screen)
     explain_surface.draw(screen)
     start_drawing_btn.draw(screen)
     next_point_btn.draw(screen)
 
+
+    # cap the framerate at 60 fps
     clock.tick(60)
+
     # Update the display
     pygame.display.flip()
 

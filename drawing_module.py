@@ -36,3 +36,6 @@ class Drawing_surface():
     def surface_unclicked(self):
         if self.is_drawing:
             self.is_drawing = False
+    
+    def get_points(self):
+        return self.dots
