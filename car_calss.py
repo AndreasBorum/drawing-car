@@ -1,5 +1,6 @@
 import pygame
 import math
+import numpy as np
 
 from car_layout import CAR_STRUCTURE_VECTORS_DICT, SPECIAL_POINTS
 
@@ -62,3 +63,31 @@ class Car():
     def get_pos_vectors(self):
         """returns vectors for car points relativ to surface"""
         return {key: coords + self.pos for key, coords in self.structure_vectors.items()}
+
+    def move_turn_car(self, new_pos, direction_vector, angle_direction):  # arbejd her!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        """moves the cars front point to new_pos, and aligns the car parralel to direction_vector"""
+        
+
+
+        angle = math.radians(pygame.Vector2(direction_vector).as_polar()[1])
+        if angle_direction < 0:
+            angle += math.radians(180)
+        print(pygame.Vector2((1,0)).as_polar(),pygame.Vector2((0,1)).as_polar(),pygame.Vector2((1,1)).as_polar())
+
+        
+        
+        
+
+        # rotate the car
+        from_other_point = {key: (vector-self.structure_vectors['F']).rotate_rad(
+            angle) for key, vector in CAR_STRUCTURE_VECTORS_DICT.items()}
+        self.structure_vectors = {
+            key: vector+self.structure_vectors['F'] for key, vector in from_other_point.items()}
+
+        # update car posistion
+        self.pos += self.structure_vectors['A']
+        self.structure_vectors = {
+            key: vector-self.structure_vectors['A'] for key, vector in self.structure_vectors.items()}
+        
+
+        self.move_car(new_pos, 'F')

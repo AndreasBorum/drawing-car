@@ -13,7 +13,8 @@ def calculate_path(car_vectors, target):
     LR= R-L
 
 
-    # checks if the lines af parallel 
+    # The following code is intended to handle cases where the determinant is zero,
+    # ensuring that the code behaves correctly when LR and v are parallel.
     if np.linalg.det([LR, v]) == 0:
         LR +=np.array([0.1,0.1])
 

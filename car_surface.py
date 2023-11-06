@@ -1,6 +1,6 @@
 import pygame
 
-import math_module
+import colors
 from car_calss import Car
 from path_module import Path
 
@@ -17,12 +17,18 @@ class Car_surface():
         self.path_calculated = False 
 
         self.car = Car()
+        self.animation_state = False
+        self.animation_speed = 0.01
+        self.animation_pos =0
 
 
     def draw(self, parrent_surface):
-        #self.surface.fill('blue')
+        self.surface.fill(colors.light)
 
-        #self.car.draw(self.surface)
+        if self.animation_state:
+            self.animation_step()
+
+        self.car.draw(self.surface)
         
         if self.path_calculated:
             self.path.draw(self.surface)
@@ -32,11 +38,25 @@ class Car_surface():
     def import_path_points(self, points):
         self.path = None
         self.path_points = points
-        self.car.turn_car(5,'F',True)
         self.car.move_car(points[0], point='F')
         self.path = Path(points, self.car)
-        print(self.path)
-        self.path_calculated = False # turned off temp
-        self.surface.fill('blue')
-        self.car.draw(self.surface)
-        self.path.draw(self.surface)
+        self.path_calculated = True
+        self.animation_pos =0
+        self.start_animation()
+
+    def start_animation(self):
+        if self.path_calculated:
+            self.animation_state = True
+
+    def stop_animation(self):
+        self.animation_state = False
+
+    def animation_step(self):
+        self.animation_pos += self.animation_speed
+        if self.animation_pos >= 1:
+            self.animation_pos = 1
+            self.car.move_turn_car(*self.path.get_pos_on_path(self.animation_pos))
+            self.stop_animation()
+        else:
+            self.car.move_turn_car(*self.path.get_pos_on_path(self.animation_pos))
+

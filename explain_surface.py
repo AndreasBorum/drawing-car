@@ -5,9 +5,10 @@ import numpy as np
 from car_calss import Car
 from helper import sub_tuple
 from math_module import calculate_path
+from helper import draw_arc_with_center
 
 
-SURFACE_SIZE = (200, 400)
+SURFACE_SIZE = (300, 400)
 SURFACE_POS = (840, 10)
 
 
@@ -40,8 +41,11 @@ class Explain_surface():
         #pygame.draw.circle(self.surface, 'red', self.path['C'], 2)
 
         # draw circle path
-        pygame.draw.circle(self.surface, (255, 0, 0, 0),
-                           self.path['C'], self.path['radius'], 2)
+        pygame.draw.circle(self.surface, (100, 0, 0, 0),
+                           self.path['C'], self.path['radius'], 1)
+        
+        draw_arc_with_center(self.surface,('red'), self.path['C'], self.path['A'], self.path['angle_rad'], self.path['angle_direction'], self.path['radius'],2)
+        
 
         # draw intersection lines
         car_vectors = self.car.get_pos_vectors()
@@ -69,6 +73,11 @@ class Explain_surface():
         text_surface3 = font.render(text3, True, 'WHITE')
         self.surface.blit(text_surface3, (10, 50))
 
+        text4 = f"A_angle: {round(self.A_angle,3)}"
+        text_surface4 = font.render(text4, True, 'WHITE')
+        self.surface.blit(text_surface4, (10, 70))
+
+
         # draw to screen
         parrent_surface.blit(self.surface, SURFACE_POS)
 
@@ -90,6 +99,12 @@ class Explain_surface():
         # print(self.path['C'],M)
         self.wheel_line = self.make_line(car_vectors['LW'], car_vectors['RW'])
         # self.perpendicular_line =  self.make_line(self.path['C'], M)
+
+        C=np.array(self.path['C'])
+        S=np.array(self.path['A'])
+        X_axis = np.array([1,0])
+        CS=S-C
+        self.A_angle = start_angle = np.sign(np.cross(CS,X_axis))*np.arccos(CS.dot(X_axis)/(np.linalg.norm(CS)*np.linalg.norm(X_axis)))
 
 
     def make_line(self, piont1, point2):
