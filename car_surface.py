@@ -19,7 +19,7 @@ class Car_surface():
         self.car = Car()
         self.animation_state = False
         self.animation_speed = 0.01
-        self.animation_pos =0
+
 
 
     def draw(self, parrent_surface):
@@ -42,6 +42,7 @@ class Car_surface():
         self.path = Path(points, self.car)
         self.path_calculated = True
         self.animation_pos =0
+        self.animation_angle =0
         self.start_animation()
 
     def start_animation(self):
@@ -55,8 +56,11 @@ class Car_surface():
         self.animation_pos += self.animation_speed
         if self.animation_pos >= 1:
             self.animation_pos = 1
-            self.car.move_turn_car(*self.path.get_pos_on_path(self.animation_pos))
             self.stop_animation()
-        else:
-            self.car.move_turn_car(*self.path.get_pos_on_path(self.animation_pos))
 
+        pos, turn_angle = self.path.get_pos_on_path(self.animation_pos, self.animation_angle)
+
+        self.car.move_car(pos,'F')
+        self.car.turn_car(turn_angle, 'F')
+
+        self.animation_angle += turn_angle

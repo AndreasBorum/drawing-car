@@ -46,6 +46,7 @@ class Car():
             turn_angle = turn_angle_
         else:
             turn_angle = math.radians(turn_angle_)
+        self.angle = (self.angle+turn_angle) % (math.pi*2)
 
         around_v = pygame.Vector2(around)
 
@@ -64,7 +65,7 @@ class Car():
         """returns vectors for car points relativ to surface"""
         return {key: coords + self.pos for key, coords in self.structure_vectors.items()}
 
-    def move_turn_car(self, new_pos, direction_vector, angle_direction):  # arbejd her!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    def move_turn_car(self, new_pos, direction_vector, angle_direction):   # not used
         """moves the cars front point to new_pos, and aligns the car parralel to direction_vector"""
         
 
@@ -74,9 +75,6 @@ class Car():
             angle += math.radians(180)
         print(pygame.Vector2((1,0)).as_polar(),pygame.Vector2((0,1)).as_polar(),pygame.Vector2((1,1)).as_polar())
 
-        
-        
-        
 
         # rotate the car
         from_other_point = {key: (vector-self.structure_vectors['F']).rotate_rad(

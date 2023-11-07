@@ -32,7 +32,7 @@ def draw_arc_with_center(screen, color, center, start_point, angle, angle_direct
 
     # Calculate the start and end angles based on the given points
     start_angle = np.sign(np.cross(CS,X_axis))*np.arccos(CS.dot(X_axis)/(np.linalg.norm(CS)*np.linalg.norm(X_axis)))
-    finish_angle = start_angle + (-angle_direction)*angle
+    finish_angle = start_angle - angle*angle_direction
 
     #print(start_angle, finish_angle)
     if angle_direction == 1:

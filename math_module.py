@@ -27,9 +27,9 @@ def calculate_path(car_vectors, target):
 
     CA = A-C
     CB = B-C
-    angle = np.arccos(CA.dot(CB)/(np.linalg.norm(CA)*np.linalg.norm(CB))) # returns radians
-    car_direction =1 if np.sign(s)!=np.sign(t) else -1
     angle_direction =np.sign(s)
+    angle = np.arccos(CA.dot(CB)/(np.linalg.norm(CA)*np.linalg.norm(CB))) #* angle_direction # returns radians
+    car_direction =1 if np.sign(s)!=np.sign(t) else -1
     radius = np.linalg.norm(C-A)
 
     arc_lenght= 2*np.pi*radius*angle/360

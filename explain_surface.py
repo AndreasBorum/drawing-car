@@ -60,7 +60,7 @@ class Explain_surface():
         self.car.draw(self.surface)
 
         # writes the angle as text on surface
-        text1 = f"Angle: {round(self.path['angle_deg'],3)}"
+        text1 = f"Angle: {round(self.path['angle_rad'],3)}"
         font = pygame.font.Font(None, 20)
         text_surface1 = font.render(text1, True, 'WHITE')
         self.surface.blit(text_surface1, (10, 10))
@@ -104,7 +104,7 @@ class Explain_surface():
         S=np.array(self.path['A'])
         X_axis = np.array([1,0])
         CS=S-C
-        self.A_angle = start_angle = np.sign(np.cross(CS,X_axis))*np.arccos(CS.dot(X_axis)/(np.linalg.norm(CS)*np.linalg.norm(X_axis)))
+        self.A_angle = np.sign(np.cross(CS,X_axis))*np.arccos(CS.dot(X_axis)/(np.linalg.norm(CS)*np.linalg.norm(X_axis)))
 
 
     def make_line(self, piont1, point2):
